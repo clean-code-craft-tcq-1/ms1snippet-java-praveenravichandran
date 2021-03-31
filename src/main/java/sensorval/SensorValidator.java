@@ -11,22 +11,23 @@ public class SensorValidator {
 	}
 
 	public static boolean validateSOCreadings(List<Double> values) {
-		return values != null && !values.isEmpty() ? checkIfValuesAreValidAndValidateDifference(values) : false;
+		return checkIfValuesAreValidAndValidateDifference(values);
 	}
 
 	public static boolean validateCurrentreadings(List<Double> values) {
-		return values != null && !values.isEmpty() ? checkIfValuesAreValidAndValidateDifference(values) : false;
+		return checkIfValuesAreValidAndValidateDifference(values);
 	}
 
 	private static boolean checkIfValuesAreValidAndValidateDifference(List<Double> values) {
 		boolean isValidAndDifferenceWithinLimit = true;
-		try {
-			if (values == null || values.isEmpty()) {
-			} else {
-				isValidAndDifferenceWithinLimit = validateDifferenceBetweenValues(values);
-			}
-		} catch (NullPointerException ne) {
+		if (values == null || values.isEmpty()) {
 			isValidAndDifferenceWithinLimit = false;
+		} else {
+			try {
+				isValidAndDifferenceWithinLimit = validateDifferenceBetweenValues(values);
+			} catch (NullPointerException ne) {
+				isValidAndDifferenceWithinLimit = false;
+			}
 		}
 		return isValidAndDifferenceWithinLimit;
 	}
