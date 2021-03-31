@@ -11,24 +11,33 @@ public class SensorValidator {
 	}
 
 	public static boolean validateSOCreadings(List<Double> values) {
-		return values != null && !values.isEmpty() ? validateDifferenceBetweenValues(values) : false;
+		return values != null && !values.isEmpty() ? checkIfValuesAreValidAndValidateDifference(values) : false;
 	}
 
 	public static boolean validateCurrentreadings(List<Double> values) {
-		return values != null && !values.isEmpty() ? validateDifferenceBetweenValues(values) : false;
+		return values != null && !values.isEmpty() ? checkIfValuesAreValidAndValidateDifference(values) : false;
+	}
+
+	private static boolean checkIfValuesAreValidAndValidateDifference(List<Double> values) {
+		boolean isValidAndDifferenceWithinLimit = true;
+		try {
+			if (values == null || values.isEmpty()) {
+			} else {
+				isValidAndDifferenceWithinLimit = validateDifferenceBetweenValues(values);
+			}
+		} catch (NullPointerException ne) {
+			isValidAndDifferenceWithinLimit = false;
+		}
+		return isValidAndDifferenceWithinLimit;
 	}
 
 	private static boolean validateDifferenceBetweenValues(List<Double> values) {
 		boolean isDifferenceWithinLimit = true;
-		try {
-			int lastButOneIndex = values.size() - 1;
-			for (int i = 0; i < lastButOneIndex; i++) {
-				if (!checkIfDifferenceNotExceedsThreshold(values.get(i), values.get(i + 1), 0.05)) {
-					isDifferenceWithinLimit = false;
-				}
+		int lastButOneIndex = values.size() - 1;
+		for (int i = 0; i < lastButOneIndex; i++) {
+			if (!checkIfDifferenceNotExceedsThreshold(values.get(i), values.get(i + 1), 0.05)) {
+				isDifferenceWithinLimit = false;
 			}
-		} catch (NullPointerException ne) {
-			isDifferenceWithinLimit = false;
 		}
 		return isDifferenceWithinLimit;
 	}
